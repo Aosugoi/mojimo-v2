@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#17132f">
+<title>MOJIMO (モジモ) — Word Rush</title>
+<style>
+:root{
+  --ink:#30201f; --muted:#76645c; --paper:#fff9e8; --purple:#b94e68;
+  --pink:#e99aa5; --yellow:#f8e5a6; --cyan:#f8e5a6; --green:#477b58;
+  --shadow:0 10px 0 rgba(70,43,35,.10),0 18px 35px rgba(70,43,35,.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:ui-rounded,"Arial Rounded MT Bold",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+body{background:linear-gradient(145deg,#f9e8ae,#f7e3a3 58%,#f6dfa0);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;overflow-x:hidden}
+button{font:inherit;cursor:pointer;border:0}
+.shell{width:min(100%,470px);position:relative}
+.topline{display:flex;justify-content:space-between;align-items:center;margin:0 4px 12px;color:#30201f;font-weight:900;letter-spacing:.13em;font-size:11px;text-shadow:0 2px 8px #5d4b9b66}
+.logo{display:flex;align-items:center;gap:9px}
+.logo-mark{width:28px;height:28px;border-radius:9px;background:#e99aa5;display:grid;place-items:center;color:#30201f;font-size:18px;box-shadow:0 3px 0 #c77e8b;transform:rotate(-7deg)}
+.sound{background:#fff8e8;color:#30201f;border:1px solid #d9c89b;border-radius:999px;padding:7px 11px;font-size:11px;font-weight:800;letter-spacing:.05em}
+.panel{background:#fff9e8;border:3px solid var(--ink);border-radius:30px;box-shadow:var(--shadow);padding:24px;position:relative;overflow:hidden}
+.panel:before{content:"";position:absolute;width:170px;height:170px;border-radius:50%;background:#f2d6d0;right:-95px;top:-105px;opacity:.55;pointer-events:none}
+.screen{position:relative;z-index:1}
+.brand{text-align:center;margin:4px 0 22px}
+.brand-kicker{font-size:11px;font-weight:1000;letter-spacing:.22em;color:#a94e60;text-transform:uppercase}
+.brand h1{font-size:clamp(42px,12vw,62px);line-height:.95;letter-spacing:-.07em;margin:8px 0 3px;font-weight:1000}
+.brand h1 span{color:var(--pink)}
+.brand-jp{font-size:16px;font-weight:900;letter-spacing:.25em;color:#76645c}
+.tagline{font-size:13px;color:var(--muted);font-weight:700;margin-top:12px}
+.section-label{font-size:10px;font-weight:1000;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin:18px 0 9px}
+.segment{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.choice{border:2px solid #e4d7b8;background:#fffdf5;border-radius:15px;padding:12px 8px;font-weight:900;color:#30201f;transition:.15s;min-height:54px}
+.choice small{display:block;color:var(--muted);font-size:10px;font-weight:700;margin-top:3px}
+.choice.active{background:#f4cbd0;border-color:#b85b6d;box-shadow:inset 0 0 0 1px #b85b6d;color:#48252a}
+.start{width:100%;margin-top:22px;border:3px solid var(--ink);border-radius:17px;padding:16px;background:#e99aa5;color:var(--ink);font-size:18px;font-weight:1000;letter-spacing:.04em;box-shadow:0 6px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+.start:active{transform:translateY(5px);box-shadow:0 1px 0 var(--ink)}
+.hint{text-align:center;color:var(--muted);font-size:11px;font-weight:700;margin:15px 0 0}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.stat{background:#f8e9d5;border:2px solid #ead8bd;border-radius:16px;padding:10px 13px}
+.stat:last-child{background:#f4dadd;border-color:#e8bdc2;text-align:right}
+.stat-label{font-size:9px;text-transform:uppercase;letter-spacing:.13em;font-weight:1000;color:var(--muted)}
+.stat-value{font-size:26px;font-weight:1000;line-height:1.1;margin-top:3px;font-variant-numeric:tabular-nums}
+.progress-wrap{height:7px;background:#eadfca;border-radius:99px;overflow:hidden;margin:-5px 0 17px}
+.progress{height:100%;width:100%;background:linear-gradient(90deg,#b85b6d,#e99aa5);transition:width .15s linear}
+.prompt-card{background:#e99aa5;border-radius:22px;padding:24px 16px 22px;color:#30201f;text-align:center;position:relative;overflow:hidden}
+.prompt-card:after{content:"";position:absolute;width:120px;height:120px;border:20px solid #ffffff30;border-radius:50%;right:-40px;bottom:-68px}
+.prompt-label{font-size:10px;letter-spacing:.17em;text-transform:uppercase;font-weight:900;color:#68404a}
+.prompt{font-size:clamp(30px,9vw,46px);font-weight:1000;letter-spacing:-.035em;margin:10px 0 3px;line-height:1.1;overflow-wrap:anywhere}
+.prompt-sub{font-size:13px;color:#5e4543;font-weight:700;min-height:18px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.answer{min-height:104px;border:3px solid #49302c;border-radius:18px;background:#fff9e8;padding:13px 8px;box-shadow:0 5px 0 #49302c;color:#30201f;font-size:clamp(17px,5vw,22px);font-weight:1000;line-height:1.15;transition:transform .12s,box-shadow .12s,border-color .12s;overflow-wrap:anywhere;text-shadow:none}
+.answer:nth-child(1){background:#fff9e8}
+.answer:nth-child(2){background:#f7dfe0}
+.answer:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.answer .reading{display:block;font-size:14px;color:#62443e;margin-top:5px;font-weight:800}
+.answer.correct{background:#dcebd7!important;border-color:#477b58;color:#263b2b}
+.answer.wrong{background:#f4c3c8!important;border-color:#ad4056;color:#48252a;animation:shake .25s}
+.answer:disabled{cursor:default}
+.feedback{height:23px;text-align:center;font-size:12px;font-weight:1000;margin:13px 0 0;color:#477b58}
+.footer-row{display:flex;justify-content:space-between;align-items:center;margin-top:16px;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.quit{background:transparent;color:var(--muted);font-weight:900;font-size:10px;text-transform:uppercase;letter-spacing:.08em;padding:5px}
+.overlay{position:absolute;inset:0;background:#49302c88;backdrop-filter:blur(5px);display:grid;place-items:center;padding:18px;border-radius:26px;z-index:5}
+.modal{background:#fff9e8;border:3px solid var(--ink);border-radius:24px;padding:25px 20px;text-align:center;width:100%;box-shadow:0 8px 0 var(--ink);animation:pop .22s ease-out}
+.emoji{font-size:45px;line-height:1}
+.modal h2{font-size:31px;letter-spacing:-.05em;margin:10px 0 4px}
+.modal p{color:var(--muted);font-weight:700;font-size:13px;margin:5px 0 16px}
+.final-score{font-size:66px;font-weight:1000;line-height:1;color:#ad5365;margin:12px 0 4px}
+.bestline{font-size:11px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.1em}
+.modal .review{background:#f7dfe0;color:var(--ink);border-radius:12px;padding:10px;margin:12px 0;font-size:16px}
+.modal .start{margin-top:18px}
+.secondary{margin-top:12px;background:transparent;color:var(--muted);font-size:12px;font-weight:900;padding:8px}
+.hidden{display:none!important}
+.toast{position:fixed;top:15px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:99px;font-size:12px;font-weight:900;z-index:20;transition:transform .25s;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@keyframes pop{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
+@media(max-width:390px){body{padding:10px}.panel{padding:19px}.answer{min-height:92px}.brand{margin-bottom:16px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<main class="shell">
+  <div class="topline">
+    <div class="logo"><span class="logo-mark">文</span><span>MOJIMO ARCADE · V2</span></div>
+    <button class="sound" id="soundBtn" aria-label="Toggle sound">♫ SOUND ON</button>
+  </div>
+  <section class="panel">
+    <div class="screen" id="home">
+      <div class="brand">
+            <h1>MOJI<span>MO</span></h1>
+        <div class="brand-jp">モ ジ モ</div>
+      </div>
+      <div class="section-label">Choose your language</div>
+      <div class="segment" id="directionChoices">
+        <button class="choice active" data-direction="jp">Learn Japanese<small>English → 日本語</small></button>
+        <button class="choice" data-direction="en">Learn English<small>日本語 → English</small></button>
+      </div>
+      <div class="section-label">Choose your mode</div>
+      <div class="segment" id="modeChoices">
+        <button class="choice active" data-mode="endless">Endless<small>One mistake ends it</small></button>
+        <button class="choice" data-mode="timed">60 seconds<small>Go for your best score</small></button>
+      </div>
+      <button class="start" id="playBtn">PLAY NOW <span>→</span></button>
+      <p class="hint">Two choices. One chance. How far can you go?</p>
+    </div>
+
+    <div class="screen hidden" id="game">
+      <div class="stats">
+        <div class="stat"><div class="stat-label">Score</div><div class="stat-value" id="score">0</div></div>
+        <div class="stat"><div class="stat-label" id="rightStatLabel">Best · Endless</div><div class="stat-value" id="best">0</div></div>
+      </div>
+      <div class="progress-wrap hidden" id="timerWrap"><div class="progress" id="timerBar"></div></div>
+      <div class="prompt-card">
+        <div class="prompt-label" id="promptLabel">Choose the Japanese</div>
+        <div class="prompt" id="prompt">Apple</div>
+        <div class="prompt-sub" id="promptSub">What does this mean?</div>
+      </div>
+      <div class="answers" id="answers">
+        <button class="answer" data-index="0"></button>
+        <button class="answer" data-index="1"></button>
+      </div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="footer-row"><span id="level">LEVEL 1 · STARTER</span><button class="quit" id="quitBtn">← Exit</button></div>
+    </div>
+    <div class="overlay hidden" id="gameOver">
+      <div class="modal">
+        <div class="emoji" id="overEmoji">💥</div>
+        <h2 id="overTitle">Game over!</h2>
+        <p id="overMessage">One slip. Run it back.</p>
+        <p class="review hidden" id="review"></p>
+        <div class="final-score" id="finalScore">0</div>
+        <div class="bestline" id="bestLine">Personal best · 0</div>
+        <button class="start" id="againBtn">PLAY AGAIN ↻</button>
+        <button class="secondary" id="homeBtn">Back to menu</button>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+(() => {
+  "use strict";
+  const words = [
+    {en:"water",jp:"水",kana:"みず",level:0},{en:"cat",jp:"猫",kana:"ねこ",level:0},
+    {en:"dog",jp:"犬",kana:"いぬ",level:0},{en:"book",jp:"本",kana:"ほん",level:0},
+    {en:"friend",jp:"友達",kana:"ともだち",level:0},{en:"school",jp:"学校",kana:"がっこう",level:0},
+    {en:"apple",jp:"りんご",kana:"りんご",level:0},{en:"flower",jp:"花",kana:"はな",level:0},
+    {en:"sun",jp:"太陽",kana:"たいよう",level:0},{en:"moon",jp:"月",kana:"つき",level:0},
+    {en:"house",jp:"家",kana:"いえ",level:0},{en:"train",jp:"電車",kana:"でんしゃ",level:0},
+    {en:"coffee",jp:"コーヒー",kana:"コーヒー",level:0},{en:"today",jp:"今日",kana:"きょう",level:0},
+    {en:"tomorrow",jp:"明日",kana:"あした",level:0},{en:"beautiful",jp:"きれい",kana:"きれい",level:1},
+    {en:"to eat",jp:"食べる",kana:"たべる",level:1},{en:"to drink",jp:"飲む",kana:"のむ",level:1},
+    {en:"to read",jp:"読む",kana:"よむ",level:1},{en:"to write",jp:"書く",kana:"かく",level:1},
+    {en:"to listen",jp:"聞く",kana:"きく",level:1},{en:"to speak",jp:"話す",kana:"はなす",level:1},
+    {en:"busy",jp:"忙しい",kana:"いそがしい",level:1},{en:"delicious",jp:"おいしい",kana:"おいしい",level:1},
+    {en:"expensive",jp:"高い",kana:"たかい",level:1},{en:"cheap",jp:"安い",kana:"やすい",level:1},
+    {en:"early",jp:"早い",kana:"はやい",level:1},{en:"quiet",jp:"静か",kana:"しずか",level:1},
+    {en:"weather",jp:"天気",kana:"てんき",level:1},{en:"weekend",jp:"週末",kana:"しゅうまつ",level:1},
+    {en:"to remember",jp:"覚える",kana:"おぼえる",level:2},{en:"to forget",jp:"忘れる",kana:"わすれる",level:2},
+    {en:"to arrive",jp:"到着する",kana:"とうちゃくする",level:2},{en:"to choose",jp:"選ぶ",kana:"えらぶ",level:2},
+    {en:"important",jp:"大切",kana:"たいせつ",level:2},{en:"convenient",jp:"便利",kana:"べんり",level:2},
+    {en:"experience",jp:"経験",kana:"けいけん",level:2},{en:"relationship",jp:"関係",kana:"かんけい",level:2},
+    {en:"environment",jp:"環境",kana:"かんきょう",level:2},{en:"to compare",jp:"比べる",kana:"くらべる",level:2},
+    {en:"to explain",jp:"説明する",kana:"せつめいする",level:2},{en:"to continue",jp:"続ける",kana:"つづける",level:2},
+    {en:"possibility",jp:"可能性",kana:"かのうせい",level:3},{en:"responsibility",jp:"責任",kana:"せきにん",level:3},
+    {en:"improvement",jp:"改善",kana:"かいぜん",level:3},{en:"to negotiate",jp:"交渉する",kana:"こうしょうする",level:3},
+    {en:"to contribute",jp:"貢献する",kana:"こうけんする",level:3},{en:"perspective",jp:"視点",kana:"してん",level:3},
+    {en:"to recognize",jp:"認識する",kana:"にんしきする",level:3},{en:"to overcome",jp:"乗り越える",kana:"のりこえる",level:3}
+  ];
+  words.push(
+    {en:"tea",jp:"お茶",kana:"おちゃ",level:0},
+    {en:"bus",jp:"バス",kana:"バス",level:0},
+    {en:"fish",jp:"魚",kana:"さかな",level:0},
+    {en:"bird",jp:"鳥",kana:"とり",level:0},
+    {en:"yesterday",jp:"昨日",kana:"きのう",level:0},
+    {en:"cold (weather)",jp:"寒い",kana:"さむい",level:1},
+    {en:"hot (weather)",jp:"暑い",kana:"あつい",level:1},
+    {en:"to buy",jp:"買う",kana:"かう",level:1},
+    {en:"to sell",jp:"売る",kana:"うる",level:1},
+    {en:"to depart",jp:"出発する",kana:"しゅっぱつする",level:2},
+    {en:"to decide",jp:"決める",kana:"きめる",level:2},
+    {en:"to finish",jp:"終える",kana:"おえる",level:2},
+    {en:"obligation",jp:"義務",kana:"ぎむ",level:3},
+    {en:"deterioration",jp:"悪化",kana:"あっか",level:3},
+    {en:"to compromise",jp:"妥協する",kana:"だきょうする",level:3},
+    {en:"to obstruct",jp:"妨げる",kana:"さまたげる",level:3}
+  );
+  const choiceGroups = [
+    ["water","coffee","tea"], ["cat","dog","fish","bird"], ["sun","moon"],
+    ["today","tomorrow","yesterday"], ["train","bus"], ["house","school"],
+    ["to eat","to drink"], ["to read","to write","to listen","to speak"],
+    ["expensive","cheap"], ["cold (weather)","hot (weather)"],
+    ["to buy","to sell"], ["busy","quiet","early","beautiful","delicious"],
+    ["to remember","to forget"], ["to arrive","to depart"],
+    ["to choose","to decide"], ["to compare","to explain"],
+    ["to finish","to continue"], ["important","convenient"],
+    ["responsibility","obligation"], ["improvement","deterioration"],
+    ["to negotiate","to compromise"], ["to contribute","to obstruct"],
+    ["to recognize","to overcome"], ["possibility","perspective"]
+  ];
+  const $ = id => document.getElementById(id);
+  let direction="jp", mode="endless", score=0, best=0, current=null, locked=false, sound=true;
+  let startedAt=0, timerId=null, recent=[], runToken=0;
+  const BEST_KEY = "mojimo_best_v1";
+  const bestKey = () => `${BEST_KEY}_${direction}_${mode}`;
+  const readBest = () => { try{return Number(localStorage.getItem(bestKey())||0)}catch(e){return 0} };
+  const saveBest = value => { try{localStorage.setItem(bestKey(),String(value))}catch(e){} };
+  const clips = {
+    correct: new Audio("bingo.wav"),
+    wrong: new Audio("reading-books.m4a")
+  };
+  for(const clip of Object.values(clips))clip.preload="auto";
+  let activeClip=null;
+  function stopFeedback(){
+    if(!activeClip)return;
+    activeClip.pause();
+    activeClip.currentTime=0;
+    activeClip=null;
+  }
+  function playFeedback(outcome){
+    if(!sound)return;
+    stopFeedback();
+    activeClip=clips[outcome];
+    activeClip.play().catch(()=>{});
+  }
+  function beep(freq=600,duration=.07,type="sine"){
+    if(!sound)return;
+    try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=new C(),o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.045,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+duration);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+duration);o.onended=()=>c.close()}catch(e){}
+  }
+  function setChoice(group, attr, value){document.querySelectorAll(`#${group} .choice`).forEach(b=>b.classList.toggle("active",b.dataset[attr]===value))}
+  $("directionChoices").addEventListener("click",e=>{const b=e.target.closest("[data-direction]");if(!b)return;direction=b.dataset.direction;setChoice("directionChoices","direction",direction)});
+  $("modeChoices").addEventListener("click",e=>{const b=e.target.closest("[data-mode]");if(!b)return;mode=b.dataset.mode;setChoice("modeChoices","mode",mode)});
+  $("soundBtn").addEventListener("click",()=>{sound=!sound;$("soundBtn").textContent=sound?"♫ SOUND ON":"♫ SOUND OFF";if(!sound)stopFeedback()});
+  function levelFor(n){return n<6?0:n<11?1:n<21?2:3}
+  function levelName(n){return ["STARTER","EVERYDAY","INTERMEDIATE","CHALLENGE"][levelFor(n)]}
+  function pickQuestion(){
+    const band=levelFor(score);
+    const pool=words.filter(w=>w.level===band);
+    const candidates=pool.filter(w=>!recent.includes(w.en));
+    const answer=candidates[Math.floor(Math.random()*candidates.length)];
+    recent.push(answer.en);
+    if(recent.length>7)recent.shift();
+    const group=choiceGroups.find(group=>group.includes(answer.en));
+    const related=group ? pool.filter(w=>w!==answer && group.includes(w.en)) : [];
+    const distractors=related.length ? related : pool.filter(w=>w!==answer);
+    const distractor=distractors[Math.floor(Math.random()*distractors.length)];
+    const options=Math.random()<.5?[answer,distractor]:[distractor,answer];
+    return {answer,options,correct:options.indexOf(answer)};
+  }
+  function renderQuestion(){
+    current=pickQuestion();locked=false;
+    $("promptLabel").textContent=direction==="jp"?"CHOOSE THE JAPANESE":"CHOOSE THE ENGLISH";
+    $("prompt").textContent=direction==="jp"?current.answer.en:current.answer.jp;
+    $("promptSub").textContent=direction==="jp"?"What does this mean?":current.answer.kana;
+    [...$("answers").children].forEach((btn,i)=>{
+      const w=current.options[i];
+      btn.disabled=false;btn.className="answer";
+      btn.style.color="#30201f";btn.innerHTML=direction==="jp"?`${w.jp}<span class="reading">${w.kana}</span>`:w.en;
+    });
+    $("feedback").textContent="";
+    $("level").textContent=`LEVEL ${levelFor(score)+1} · ${levelName(score)}`;
+  }
+  function startGame(){
+    stopFeedback();
+    clearInterval(timerId);runToken++;score=0;recent=[];locked=false;best=readBest();
+    $("home").classList.add("hidden");$("game").classList.remove("hidden");$("gameOver").classList.add("hidden");
+    $("score").textContent="0";$("best").textContent=best;$("rightStatLabel").textContent=`Best · ${mode==="endless"?"Endless":"60 sec"}`;
+    $("timerWrap").classList.toggle("hidden",mode!=="timed");
+    renderQuestion();
+    if(mode==="timed"){startedAt=Date.now();updateTimer();const token=runToken;timerId=setInterval(()=>{if(token!==runToken)return;updateTimer()},100)}
+  }
+  function updateTimer(){
+    const left=Math.max(0,60000-(Date.now()-startedAt));
+    $("timerBar").style.width=(left/60000*100)+"%";
+    if(left<=0){clearInterval(timerId);endGame("time")}
+  }
+  function answer(index){
+    if(locked||!current)return;
+    if(mode==="timed" && Date.now()-startedAt>=60000){
+      endGame("time");
+      return;
+    }
+    locked=true;
+    const token=runToken;
+    const btns=[...$("answers").children];btns.forEach(b=>b.disabled=true);
+    if(index===current.correct){
+      score++;$("score").textContent=score;$("feedback").textContent=["NICE! ✨","GREAT! ⚡","KEEP GOING! 🔥","PERFECT! 🌟"][Math.floor(Math.random()*4)];
+      btns[index].classList.add("correct");playFeedback("correct");
+      if(score===5||score===10||score===20||score===30)toast(`🔥 ${score} IN A ROW!`);
+      setTimeout(()=>{if(token!==runToken)return;if(mode==="timed" && Date.now()-startedAt>=60000){endGame("time");return;}renderQuestion()},210);
+    }else{
+      btns[index].classList.add("wrong");btns[current.correct].classList.add("correct");$("feedback").textContent="OOPS! ONE MISTAKE = GAME OVER";playFeedback("wrong");
+      clearInterval(timerId);
+      setTimeout(()=>{if(token===runToken)endGame("wrong")},300);
+    }
+  }
+  function endGame(reason){
+    const missed=reason==="wrong" ? current.answer : null;
+    const record=score>best;
+    $("review").classList.toggle("hidden",!missed);
+    $("review").textContent=missed ? `${missed.jp}${missed.kana===missed.jp?"":` (${missed.kana})`} · ${missed.en}` : "";
+    locked=true;
+    current=null;
+    clearInterval(timerId);runToken++;best=Math.max(best,score);saveBest(best);
+    $("best").textContent=best;$("gameOver").classList.remove("hidden");
+    $("overEmoji").textContent=reason==="time"?"⏱️":"💥";
+    $("overTitle").textContent=reason==="time"?"Time's up!":"Game over!";
+    $("overMessage").textContent=reason==="time"?"60 seconds. How did you do?":"One slip. Shake it off and go again.";
+    $("finalScore").textContent=score;$("bestLine").textContent=record ? "New personal best!" : `Personal best · ${best}`;
+    $("againBtn").focus();
+    if(reason==="time" && (!activeClip || activeClip.paused))beep(480,.12);
+  }
+  function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),1300)}
+  $("playBtn").addEventListener("click",startGame);
+  $("againBtn").addEventListener("click",startGame);
+  $("homeBtn").addEventListener("click",()=>{stopFeedback();$("gameOver").classList.add("hidden");$("game").classList.add("hidden");$("home").classList.remove("hidden");clearInterval(timerId);runToken++});
+  $("quitBtn").addEventListener("click",()=>{stopFeedback();$("game").classList.add("hidden");$("home").classList.remove("hidden");clearInterval(timerId);runToken++});
+  $("answers").addEventListener("click",e=>{const b=e.target.closest("[data-index]");if(b)answer(Number(b.dataset.index))});
+  document.addEventListener("keydown",e=>{if(e.repeat)return;const gameActive=!$("game").classList.contains("hidden") && $("gameOver").classList.contains("hidden");if(gameActive){if(e.key==="1")answer(0);if(e.key==="2")answer(1)}});
+})();
+</script>
+</body>
+</html>
