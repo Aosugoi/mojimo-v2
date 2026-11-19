@@ -9,7 +9,7 @@ A mobile-friendly Japanese vocabulary game with English, Japanese, and Bahasa In
 - 19 pixel-art Mojimo with blinking, ear/tail motion, awake/rest poses, and ten travel backgrounds.
 - Updated round Usamochi and Sarumaru C; the black cat is now Nekorin.
 - Dream Keys story: wake lost friends from magical dream bubbles. Six starters are unlocked. A spin has a 10% chance to add a saved Dream Key; otherwise dream dust. Spend one key to wake one of twelve uncollected friends, with no duplicates. The persistent coin/key bar stays visible on every screen. First spin costs 1 coin, increasing by 1 after each spin.
-- Secret pink leopard Goromaru unlocks only after collecting all eighteen other friends. His supplied spoken-name recording is cleaned and volume-balanced. Other characters currently retain animal-inspired selection sounds pending readable replacement recordings.
+- Secret pink leopard Goromaru unlocks only after collecting all eighteen other friends. His supplied spoken-name recording is cleaned and volume-balanced. All 19 characters say their own name using the supplied recordings. Clips are cleaned, volume-balanced, and play individually without overlap.
 - Endless awards 20 coins for each completed level of ten correct answers. Failed/incomplete levels earn zero; rewards from completed levels remain.
 - 60-second mode continues after mistakes and awards 2 coins per correct answer, capped at 100, only when the timer finishes. Early exit gives no timed reward.
 - A gentle chime celebrates completed levels.
