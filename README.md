@@ -6,7 +6,9 @@ A mobile-friendly Japanese vocabulary game with English, Japanese, and Bahasa In
 
 ## New features
 
-- Missed Words is the sixth main-menu tile: review a persistent list or practice only missed words without coin rewards. Last Run offers a study button for every missed word and a practice shortcut for that run.
+- Answer summaries show Japanese, kana, romaji and the localized meaning on separate clean lines.
+
+- Missed Words is the sixth main-menu tile: review a saved list or practice only missed words without coin rewards. Correct practice clears a word; later mistakes add it back. Cleared lists survive reload. Last Run offers a study button for every missed word and a practice shortcut for that run.
 
 - English, Japanese and Bahasa Indonesia flag buttons. Quest, 60-second and Study Hall memory-check choices show Japanese with compact romaji readings.
 
