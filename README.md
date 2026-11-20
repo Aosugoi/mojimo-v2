@@ -6,7 +6,7 @@ A mobile-friendly Japanese vocabulary game with English, Japanese, and Bahasa In
 
 ## New features
 
-- English, Japanese and Bahasa Indonesia flag buttons. Quest and 60-second choices show Japanese with compact romaji readings.
+- English, Japanese and Bahasa Indonesia flag buttons. Quest, 60-second and Study Hall memory-check choices show Japanese with compact romaji readings.
 
 - 19 pixel-art Mojimo with blinking, ear/tail motion, awake/rest poses, and ten travel backgrounds.
 - Updated round Usamochi and Sarumaru C; the black cat is now Nekorin.

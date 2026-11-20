@@ -1021,9 +1021,7 @@ html[lang="id"] .character-drawer summary{font-size:14px}
       $("studyQuestion").textContent=direction==="jp"?wordMeaning(word):word.jp;
       $("studyQuestion").lang=direction==="jp"?(locale==="id"?"id":"en"):"ja";
       [...$("studyAnswers").children].forEach((button,index)=>{
-        button.textContent=studyChoices[index][direction==="jp"?"jp":"en"];
-        button.lang=direction==="jp"?"ja":"en";
-        button.disabled=false;
+        renderAnswerChoice(button,studyChoices[index]);
       });
     }
   }
